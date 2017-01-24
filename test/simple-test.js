@@ -281,6 +281,20 @@ describe('Hock HTTP Tests', function() {
       done();
     });
 
+    it('clears all routes', function(done) {
+      hockInstance
+        .get('/url?password=foo')
+        .reply(200, { 'hock': 'ok' })
+        .clearRoutes()
+        .get('/newurl')
+        .reply(200, { 'hock': 'ok'});
+
+      hockInstance.hasRoute('GET', '/url?password=foo').should.equal(false);
+      hockInstance.hasRoute('GET', '/newurl').should.equal(true);
+
+      done();
+    });
+
     after(function(done) {
       httpServer.close(done);
     });
